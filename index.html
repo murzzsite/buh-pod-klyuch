@@ -165,41 +165,64 @@
   <div class="wrap">
     <div class="calc__head">
       <h2>Посчитайте абонплату за минуту</h2>
-      <p>Выберите, как устроен ваш бизнес. Покажем цену по прайсу и вашу цену со скидкой. Точную сумму зафиксируем в договоре после бесплатного экспресс-анализа.</p>
+      <p>Отметьте, что есть в вашем бизнесе. Покажем цену по прайсу и вашу цену со скидкой. Итоговую сумму зафиксируем в договоре после бесплатного экспресс-анализа.</p>
     </div>
 
     <form class="calc__box" id="calcForm" autocomplete="off">
       <div class="calc__controls">
-        <fieldset class="seg">
-          <legend>Форма бизнеса</legend>
-          <label><input type="radio" name="form" value="ip" checked><span>ИП</span></label>
-          <label><input type="radio" name="form" value="ooo"><span>ООО</span></label>
-        </fieldset>
-
-        <fieldset class="seg seg--wrap">
-          <legend>Система налогообложения</legend>
-          <label><input type="radio" name="regime" value="usn6" checked><span>УСН «доходы»</span></label>
-          <label><input type="radio" name="regime" value="usn15"><span>УСН «доходы − расходы»</span></label>
-          <label><input type="radio" name="regime" value="usnnds"><span>УСН с НДС</span></label>
-          <label><input type="radio" name="regime" value="osno"><span>ОСНО</span></label>
-        </fieldset>
-
-        <div class="range">
-          <label for="emp">Сотрудников в штате <output id="empOut">0</output></label>
-          <input type="range" id="emp" name="emp" min="0" max="50" step="1" value="0">
+        <div class="calc__base">
+          <b>Бухгалтерский и налоговый учёт</b>
+          <span>Функция главного бухгалтера, одно юрлицо. Базовая цена по прайсу: 20 000 ₽ в месяц.</span>
         </div>
 
-        <div class="range">
-          <label for="docs">Первичных документов в месяц <output id="docsOut">до 30</output></label>
-          <input type="range" id="docs" name="docs" min="0" max="4" step="1" value="0">
+        <label class="check">
+          <input type="checkbox" id="zero" name="zero">
+          <span>Деятельности нет: нулевая отчётность (15 000 ₽ в квартал)</span>
+        </label>
+
+        <div class="steppers" id="steppers">
+          <div class="step" data-price="5000" data-max="20" data-label="Первичка (блоки по 20 док.)">
+            <div><b>Первичные документы</b><small>Каждые 20 документов (до 10 позиций), 5 000 ₽</small></div>
+            <div class="stepper"><button type="button" aria-label="Меньше" data-d="-1">−</button><output>0</output><button type="button" aria-label="Больше" data-d="1">+</button></div>
+          </div>
+          <div class="step" data-price="2000" data-max="20" data-label="Платёжные поручения (блоки по 10)">
+            <div><b>Платёжные поручения</b><small>Каждые 10 платёжек, 2 000 ₽</small></div>
+            <div class="stepper"><button type="button" aria-label="Меньше" data-d="-1">−</button><output>0</output><button type="button" aria-label="Больше" data-d="1">+</button></div>
+          </div>
+          <div class="step" data-price="2000" data-max="20" data-label="Счета на реализацию (блоки по 10)">
+            <div><b>Счета на реализацию</b><small>Каждые 10 счетов (до 10 позиций), 2 000 ₽</small></div>
+            <div class="stepper"><button type="button" aria-label="Меньше" data-d="-1">−</button><output>0</output><button type="button" aria-label="Больше" data-d="1">+</button></div>
+          </div>
+          <div class="step" data-price="2000" data-max="10" data-label="Кассы и эквайринг">
+            <div><b>Розница и онлайн-торговля</b><small>Касса с эквайрингом или онлайн-эквайринг, 2 000 ₽ за каждый</small></div>
+            <div class="stepper"><button type="button" aria-label="Меньше" data-d="-1">−</button><output>0</output><button type="button" aria-label="Больше" data-d="1">+</button></div>
+          </div>
+          <div class="step" data-price="1000" data-max="10" data-label="Расчётные счета с оборотами">
+            <div><b>Расчётные счета с оборотами</b><small>1 000 ₽ за каждый счёт</small></div>
+            <div class="stepper"><button type="button" aria-label="Меньше" data-d="-1">−</button><output>0</output><button type="button" aria-label="Больше" data-d="1">+</button></div>
+          </div>
+          <div class="step" data-price="1500" data-max="100" data-label="Сотрудники РФ">
+            <div><b>Сотрудники, граждане РФ</b><small>Зарплата, кадры и отчётность, 1 500 ₽ за человека</small></div>
+            <div class="stepper"><button type="button" aria-label="Меньше" data-d="-1">−</button><output>0</output><button type="button" aria-label="Больше" data-d="1">+</button></div>
+          </div>
+          <div class="step" data-price="2500" data-max="50" data-label="Иностранные сотрудники">
+            <div><b>Иностранные сотрудники</b><small>Зарплата и кадровое делопроизводство, в том числе ВКС, 2 500 ₽ за человека</small></div>
+            <div class="stepper"><button type="button" aria-label="Меньше" data-d="-1">−</button><output>0</output><button type="button" aria-label="Больше" data-d="1">+</button></div>
+          </div>
+          <div class="step" data-price="5000" data-max="6" data-label="Маркетплейсы">
+            <div><b>Маркетплейсы</b><small>5 000 ₽ за площадку, до двух магазинов на ней включено</small></div>
+            <div class="stepper"><button type="button" aria-label="Меньше" data-d="-1">−</button><output>0</output><button type="button" aria-label="Больше" data-d="1">+</button></div>
+          </div>
+          <div class="step" data-price="3500" data-max="20" data-label="Доп. магазины">
+            <div><b>Дополнительные магазины</b><small>Сверх двух на одной площадке, 3 500 ₽ за каждый</small></div>
+            <div class="stepper"><button type="button" aria-label="Меньше" data-d="-1">−</button><output>0</output><button type="button" aria-label="Больше" data-d="1">+</button></div>
+          </div>
         </div>
 
         <fieldset class="chips">
-          <legend>Особенности бизнеса</legend>
-          <label><input type="checkbox" name="opt" value="mp"><span>Маркетплейсы</span></label>
-          <label><input type="checkbox" name="opt" value="trans"><span>Перевозки: ГосЛог и ЭТРН</span></label>
-          <label><input type="checkbox" name="opt" value="gov"><span>Госзакупки 44-ФЗ / 223-ФЗ</span></label>
-          <label><input type="checkbox" name="opt" value="foreign"><span>Иностранные сотрудники</span></label>
+          <legend>Дополнительно</legend>
+          <label><input type="checkbox" name="opt" value="ved" data-price="10000" data-label="Бухгалтерия ВЭД"><span>Внешнеэкономическая деятельность · 10 000 ₽</span></label>
+          <label><input type="checkbox" name="nds" id="nds"><span>УСН с НДС</span></label>
         </fieldset>
 
         <label class="check">
@@ -216,7 +239,7 @@
         <ul class="calc__lines" id="calcLines"></ul>
         <p class="calc__gift" id="giftLine" hidden>Для ООО и ИП с УСН на НДС первый месяц обслуживания в подарок.</p>
         <a class="btn" id="calcCta" href="#contact"><span>Зафиксировать эту цену</span></a>
-        <p class="calc__hint">Ориентир. Окончательная сумма фиксируется в договоре.</p>
+        <p class="calc__hint">Подключение к Контур Экстерн для сдачи отчётности оплачивается отдельно: 7 100 ₽ за 12 месяцев. Окончательная сумма фиксируется в договоре.</p>
       </aside>
       <noscript><p class="calc__noscript">Включите JavaScript, чтобы пользоваться калькулятором, или оставьте заявку — рассчитаем вручную.</p></noscript>
     </form>
@@ -247,26 +270,30 @@
         <b class="tile__big">−25%</b>
         <h3>За оперативность</h3>
         <p>Заключите договор и оплатите в течение 5 рабочих дней.</p>
+        <span class="tile__date">до 31.03.2027</span>
       </a>
       <a class="tile tile--d" href="#contact" data-topic="Бесплатная регистрация ИП или ООО">
         <b class="tile__big">0 ₽</b>
         <h3>Регистрация ИП или ООО</h3>
         <p>Для стартапов и начинающих предпринимателей при заключении договора на сопровождение.</p>
+        <span class="tile__date">до 31.03.2027</span>
       </a>
       <a class="tile tile--e" href="#contact" data-topic="Бесплатный экспресс-анализ учёта">
         <b class="tile__big">0 ₽</b>
         <h3>Экспресс-анализ учёта</h3>
         <p>Запишитесь на онлайн или офлайн встречу.</p>
+        <span class="tile__date">до 31.03.2027</span>
       </a>
       <a class="tile tile--f" href="#contact" data-topic="Бесплатная консультация">
         <b class="tile__big">0 ₽</b>
         <h3>Консультация</h3>
         <p>При заключении договора на бухгалтерское сопровождение.</p>
+        <span class="tile__date">до 31.03.2027</span>
       </a>
       <a class="tile tile--g" href="#contact" data-topic="Анализ налоговой нагрузки">
         <div>
           <b class="tile__big">Анализ налоговой нагрузки</b>
-          <p>Индивидуальный разбор и рекомендации, как её снизить. При заключении договора на бухгалтерское сопровождение.</p>
+          <p>Индивидуальный разбор и рекомендации, как её снизить. При заключении договора на бухгалтерское сопровождение. Акция до 31.03.2027.</p>
         </div>
         <span class="tile__go">Хочу</span>
       </a>
@@ -338,6 +365,12 @@
         <li>Назовём точную цену до подписания договора</li>
         <li>Учтём подходящую акцию</li>
       </ul>
+      <p class="contact__direct">Или свяжитесь напрямую:</p>
+      <ul class="contact__links">
+        <li><a href="tel:+79536119352">+7 953 611-93-52</a></li>
+        <li><a href="https://t.me/lazarevichartem" target="_blank" rel="noopener">Telegram @lazarevichartem</a></li>
+        <li><a href="https://vk.ru/id459988017" target="_blank" rel="noopener">ВКонтакте</a></li>
+      </ul>
     </div>
     <form class="form" id="leadForm" novalidate>
       <label class="field"><span>Как к вам обращаться</span><input type="text" name="name" autocomplete="name" required placeholder="Имя"></label>
@@ -369,7 +402,8 @@
   <div class="wrap footer__inner">
     <p class="footer__brand">Бухгалтерия под ключ</p>
     <p>Абонентское бухгалтерское обслуживание ИП и ООО. Работаем по всей России в часовых поясах до +4 часов к Москве.</p>
-    <p class="footer__small">© <span id="year">2026</span> · <a href="privacy.html">Политика конфиденциальности</a></p>
+    <p><a href="tel:+79536119352">+7 953 611-93-52</a> · <a href="https://t.me/lazarevichartem" target="_blank" rel="noopener">Telegram</a> · <a href="https://vk.ru/id459988017" target="_blank" rel="noopener">ВКонтакте</a></p>
+    <p class="footer__small">Самозанятый, ИНН 510601505581<br>© <span id="year">2026</span> · <a href="privacy.html">Политика конфиденциальности</a></p>
   </div>
 </footer>
 

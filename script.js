@@ -80,55 +80,47 @@
     });
   });
 
-  // ===== CALCULATOR (ориентировочные цены, окончательно — после экспресс-анализа) =====
+  // ===== CALCULATOR (прайс клиента; скидка 20% / 25%) =====
   const calcForm = $('#calcForm');
-  const P = {
-    form: { ip: 5000, ooo: 7000 },
-    regime: { usn6: 1500, usn15: 3000, usnnds: 6500, osno: 10500 },
-    emp: 900,
-    docs: [0, 2200, 5200, 9000, 14000],
-    docsLabel: ['до 30', 'до 100', 'до 300', 'до 600', 'до 1 000'],
-    opt: { mp: 3000, trans: 3500, gov: 4000, foreign: 2500 }
-  };
-  const names = {
-    form: { ip: 'ИП', ooo: 'ООО' },
-    regime: { usn6: 'УСН «доходы»', usn15: 'УСН «доходы − расходы»', usnnds: 'УСН с НДС', osno: 'ОСНО' },
-    opt: { mp: 'Маркетплейсы', trans: 'ГосЛог и ЭТРН', gov: '44-ФЗ / 223-ФЗ', foreign: 'Иностранные сотрудники' }
-  };
   const state = { old: 0, now: 0, summary: '' };
   const view = { old: 0, now: 0 };
 
   function calc() {
-    const f = calcForm.form.value;
-    const r = calcForm.regime.value;
-    const emp = +calcForm.emp.value;
-    const di = +calcForm.docs.value;
-    const opts = $$('input[name=opt]:checked', calcForm).map(i => i.value);
+    const lines = [];
+    const zero = $('#zero').checked;
+    $('#steppers').classList.toggle('is-off', zero);
+    if (zero) {
+      lines.push(['Нулевая отчётность (15 000 ₽ в квартал)', 5000]);
+    } else {
+      lines.push(['Бухгалтерский и налоговый учёт', 20000]);
+      $$('.step', calcForm).forEach(st => {
+        const n = +$('output', st).textContent;
+        if (n) lines.push([st.dataset.label + ' × ' + n, n * +st.dataset.price]);
+      });
+      $$('input[name=opt]:checked', calcForm).forEach(o => lines.push([o.dataset.label, +o.dataset.price]));
+    }
     const fast = calcForm.fast.checked;
+    const list = lines.reduce((sum, l) => sum + l[1], 0);
+    const ours = Math.round(list * (fast ? 0.75 : 0.8) / 10) * 10;
 
-    const lines = [
-      [names.form[f] + ', ' + names.regime[r], P.form[f] + P.regime[r]],
-    ];
-    if (emp) lines.push(['Сотрудники: ' + emp, emp * P.emp]);
-    if (P.docs[di]) lines.push(['Документы: ' + P.docsLabel[di] + ' в мес.', P.docs[di]]);
-    opts.forEach(o => lines.push([names.opt[o], P.opt[o]]));
-
-    const list = lines.reduce((s, l) => s + l[1], 0);
-    const k = fast ? 0.75 : 0.8;
-    const ours = Math.round(list * k / 10) * 10;
-
-    $('#empOut').textContent = emp;
-    $('#docsOut').textContent = P.docsLabel[di];
     $('#discLine').textContent = fast ? 'Скидка 25% за оперативность' : 'Скидка 20% для новых клиентов';
     $('#calcLines').innerHTML = lines.map(l => `<li><span>${l[0]}</span><b>${fmt(l[1])} ₽</b></li>`).join('');
-    $('#giftLine').hidden = !(r === 'usnnds');
+    $('#giftLine').hidden = !$('#nds').checked;
 
     state.old = list;
     state.now = ours;
-    state.summary = `Калькулятор: ${lines.map(l => l[0]).join('; ')}. По прайсу ${fmt(list)} ₽, со скидкой ${fmt(ours)} ₽/мес${fast ? ' (оплата в 5 дней)' : ''}.`;
+    state.summary = `Калькулятор: ${lines.map(l => l[0]).join('; ')}. По прайсу ${fmt(list)} ₽, со скидкой ${fmt(ours)} ₽/мес${fast ? ' (оплата в 5 дней)' : ''}${$('#nds').checked ? '; УСН с НДС' : ''}.`;
     $('#calcField').value = state.summary;
     animateNumbers();
   }
+
+  $$('.step').forEach(st => {
+    const out = $('output', st);
+    $$('button', st).forEach(btn => btn.addEventListener('click', () => {
+      out.textContent = Math.max(0, Math.min(+st.dataset.max, +out.textContent + +btn.dataset.d));
+      calc();
+    }));
+  });
 
   function animateNumbers() {
     const oldEl = $('#oldPrice'), newEl = $('#newPrice');
@@ -144,7 +136,6 @@
     }
   }
   if (calcForm) {
-    calcForm.addEventListener('input', calc);
     calcForm.addEventListener('change', calc);
     calcForm.addEventListener('submit', e => e.preventDefault());
     calc();
