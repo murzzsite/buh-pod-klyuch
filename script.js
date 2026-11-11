@@ -85,14 +85,36 @@
   const state = { old: 0, now: 0, summary: '' };
   const view = { old: 0, now: 0 };
 
+  // прайс по листам таблицы клиента: [база в мес., блок первички в мес.]
+  const TARIFF = {
+    ooo: { usn6: [13000, 2500], usn15: [17000, 3000], ausn6: [10000, 2500], ausn15: [14000, 3000], osno: [20000, 5000] },
+    ip: { usn6: [10000, 2500], usn15: [15000, 3000], ausn6: [8000, 2500], ausn15: [12000, 3000], patent: [8000, 2500], osno: [17000, 5000] }
+  };
+  const ZERO_Q = { ooo: 15000, ip: 5000 };
+  const REGIME = { usn6: 'УСН «доходы»', usn15: 'УСН «доходы − расходы»', ausn6: 'АУСН «доходы» 8%', ausn15: 'АУСН «доходы − расходы» 20%', patent: 'Патент', osno: 'ОСНО' };
+  const FORM = { ip: 'ИП', ooo: 'ООО' };
+
   function calc() {
     const lines = [];
+    const form = calcForm.form.value;
+    if (form === 'ooo' && calcForm.regime.value === 'patent') calcForm.regime.value = 'usn6';
+    const regime = calcForm.regime.value;
+    $('#patentLbl').hidden = form === 'ooo';
+    const [base, prim] = TARIFF[form][regime];
+    const who = FORM[form] + ', ' + REGIME[regime];
+    const prStep = $('#primStep');
+    prStep.dataset.price = prim;
+    $('#primHint').textContent = 'Каждые 20 документов (до 10 позиций), ' + fmt(prim) + ' ₽';
+    $('#baseTitle').textContent = 'Бухгалтерский и налоговый учёт: ' + fmt(base) + ' ₽ в месяц';
+    $('#baseText').textContent = 'Функция главного бухгалтера, ' + who + '.';
+    const zq = ZERO_Q[form];
+    $('#zeroTxt').textContent = 'Деятельности нет: нулевая отчётность (' + fmt(zq) + ' ₽ в квартал)';
     const zero = $('#zero').checked;
     $('#steppers').classList.toggle('is-off', zero);
     if (zero) {
-      lines.push(['Нулевая отчётность (15 000 ₽ в квартал)', 5000]);
+      lines.push(['Нулевая отчётность (' + fmt(zq) + ' ₽ в квартал)', Math.round(zq / 3)]);
     } else {
-      lines.push(['Бухгалтерский и налоговый учёт', 20000]);
+      lines.push([who, base]);
       $$('.step', calcForm).forEach(st => {
         const n = +$('output', st).textContent;
         if (n) lines.push([st.dataset.label + ' × ' + n, n * +st.dataset.price]);

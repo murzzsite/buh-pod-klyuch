@@ -170,19 +170,35 @@
 
     <form class="calc__box" id="calcForm" autocomplete="off">
       <div class="calc__controls">
+        <fieldset class="seg">
+          <legend>Форма бизнеса</legend>
+          <label><input type="radio" name="form" value="ip" checked><span>ИП</span></label>
+          <label><input type="radio" name="form" value="ooo"><span>ООО</span></label>
+        </fieldset>
+
+        <fieldset class="seg seg--wrap">
+          <legend>Система налогообложения</legend>
+          <label><input type="radio" name="regime" value="usn6" checked><span>УСН «доходы»</span></label>
+          <label><input type="radio" name="regime" value="usn15"><span>УСН «доходы − расходы»</span></label>
+          <label><input type="radio" name="regime" value="ausn6"><span>АУСН «доходы» (8%)</span></label>
+          <label><input type="radio" name="regime" value="ausn15"><span>АУСН «доходы − расходы» (20%)</span></label>
+          <label id="patentLbl"><input type="radio" name="regime" value="patent"><span>Патент</span></label>
+          <label><input type="radio" name="regime" value="osno"><span>ОСНО</span></label>
+        </fieldset>
+
         <div class="calc__base">
-          <b>Бухгалтерский и налоговый учёт</b>
-          <span>Функция главного бухгалтера, одно юрлицо. Базовая цена по прайсу: 20 000 ₽ в месяц.</span>
+          <b id="baseTitle">Бухгалтерский и налоговый учёт</b>
+          <span id="baseText">Функция главного бухгалтера, одно юрлицо.</span>
         </div>
 
         <label class="check">
           <input type="checkbox" id="zero" name="zero">
-          <span>Деятельности нет: нулевая отчётность (15 000 ₽ в квартал)</span>
+          <span id="zeroTxt">Деятельности нет: нулевая отчётность</span>
         </label>
 
         <div class="steppers" id="steppers">
-          <div class="step" data-price="5000" data-max="20" data-label="Первичка (блоки по 20 док.)">
-            <div><b>Первичные документы</b><small>Каждые 20 документов (до 10 позиций), 5 000 ₽</small></div>
+          <div class="step" id="primStep" data-price="5000" data-max="20" data-label="Первичка (блоки по 20 док.)">
+            <div><b>Первичные документы</b><small id="primHint">Каждые 20 документов (до 10 позиций)</small></div>
             <div class="stepper"><button type="button" aria-label="Меньше" data-d="-1">−</button><output>0</output><button type="button" aria-label="Больше" data-d="1">+</button></div>
           </div>
           <div class="step" data-price="2000" data-max="20" data-label="Платёжные поручения (блоки по 10)">
